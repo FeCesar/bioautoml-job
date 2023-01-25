@@ -29,3 +29,24 @@ jobs:
         context: ./
         push: true
         tags: bioautoml/job:latest, bioautoml/job:${{ github.sha }}
+        
+  deploy:
+    name: Deploy app
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker pull bioautoml/job:latest
+          docker container stop bioautoml-job
+          docker container rm bioautoml-job
+          docker container run --detach --name bioautoml-job -e AMQP_ADDRESS={{ secrets.AMQP_ADDRESS }} bioautoml/job:latest
+    
+
+    
