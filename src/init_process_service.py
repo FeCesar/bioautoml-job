@@ -11,12 +11,12 @@ def start(message):
     decoded_message = decode(message)
     process = json.loads(decoded_message, object_hook=lambda d: SimpleNamespace(**d))
 
-    print(process)
-    print(process.processModel)
-    print(process.parametersEntity)
+    logger.info(process)
+    logger.info(process.processModel)
+    logger.info(process.parametersEntity)
 
     for file in process.files:
-        print(file)
+        logger.info(file)
 
 
 def decode(process):
