@@ -20,7 +20,7 @@ def start_consume():
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
 
-    channel.basic_consume('baml.processes.dna-rna',
+    channel.basic_consume('baml.processes.init',
                           callback,
                           auto_ack=True)
 
