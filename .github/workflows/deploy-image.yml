@@ -32,6 +32,7 @@ jobs:
         
   deploy:
     name: Deploy app
+    needs: build-application
     runs-on: ubuntu-latest
     
     steps:
