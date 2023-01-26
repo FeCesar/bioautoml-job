@@ -1,16 +1,20 @@
+from datetime import datetime
 from os import environ
 import logging
 import traceback
 
 import pika
 
+from ThreadPoolService import ThreadPoolService
 from init_process_service import start
 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-address = environ.get("AMQP_ADDRESS")
+address = environ.get("APP_AMQP_ADDRESS")
+amount_workers = environ.get("APP_WORKERS")
+thread_poll = ThreadPoolService(amount_workers)
 
 
 def start_consume():
@@ -29,9 +33,10 @@ def start_consume():
 
 def callback(ch, method, properties, body):
     try:
-        logger.info("received " + body.__str__())
-        start(body)
-        logger.info("done")
+        logger.info("received " + body.__str__() + " at " + datetime.now().__str__())
+        thread = thread_poll.get_worker()
+        thread.submit(start, body)
+        logger.info("released thread=", thread.__str__())
     except Exception as e:
         logger.error("Exception %s: %s" % (type(e), e))
         logger.debug(traceback.format_exc())
