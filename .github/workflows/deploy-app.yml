@@ -50,7 +50,7 @@ jobs:
           docker pull bioautoml/job:latest
           docker container stop bioautoml-job
           docker container rm bioautoml-job
-          docker container run --detach --name bioautoml-job -e AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }} bioautoml/job:latest
+          docker container run --detach --name bioautoml-job -e APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }} -e APP_WORKERS=${{ secrets.APP_WORKERS }} bioautoml/job:latest
     
 
     
