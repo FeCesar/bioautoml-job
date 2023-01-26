@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 address = environ.get("APP_AMQP_ADDRESS")
-amount_workers = environ.get("APP_WORKERS")
+amount_workers = int(environ.get("APP_WORKERS"))
 thread_poll = ThreadPoolService(amount_workers)
 
 
@@ -36,7 +36,6 @@ def callback(ch, method, properties, body):
         logger.info("received " + body.__str__() + " at " + datetime.now().__str__())
         thread = thread_poll.get_worker()
         thread.submit(start, body)
-        logger.info("released thread=", thread.__str__())
     except Exception as e:
         logger.error("Exception %s: %s" % (type(e), e))
         logger.debug(traceback.format_exc())
