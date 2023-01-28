@@ -1,4 +1,3 @@
-from datetime import datetime
 from os import environ
 import traceback
 
@@ -32,7 +31,7 @@ def start_consume():
 
 def callback(ch, method, properties, body):
     try:
-        # logger.info("received " + body.__str__() + " at " + datetime.now().__str__())
+        logger.info("received=" + body.__str__())
         thread = thread_poll.get_worker()
         thread.submit(start, body)
     except Exception as e:
