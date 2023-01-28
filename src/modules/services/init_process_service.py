@@ -1,10 +1,10 @@
-import logging
 import base64
 import json
 from types import SimpleNamespace
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from ..services.logger_service import get_logger
+
+logger = get_logger(__name__)
 
 
 def start(message):
