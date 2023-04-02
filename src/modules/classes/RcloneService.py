@@ -46,3 +46,5 @@ class RcloneService:
             container_status = _get_container_status(container_attrs)
             is_not_exited = _container_is_exited(container_status)
             sleep(2)
+
+        container.remove()
