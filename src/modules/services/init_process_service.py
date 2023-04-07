@@ -3,6 +3,7 @@ import json
 import traceback
 from types import SimpleNamespace
 from os import environ
+from subprocess import run
 
 from ..services.logger_service import get_logger
 from ..services.os_service import create_folder
@@ -22,16 +23,33 @@ def start(message):
     try:
         decoded_message = _decode(message)
         process = json.loads(decoded_message, object_hook=lambda d: SimpleNamespace(**d))
-        prepare(process)
+        bash_command = _prepare(process)
+        _run(bash_command, process)
     except Exception as e:
         logger.error("Exception %s: %s" % (type(e), e))
         logger.debug(traceback.format_exc())
 
 
-def prepare(process):
+def _run(bash_command, process):
+    process_files_local_output = _remove_double_bar(output_local_files + process.parametersEntity.output)
+    all_bash_command = complement_bash_command(bash_command, process_files_local_output)
+    run(all_bash_command, shell=True)
+
+
+def complement_bash_command(bash_command, process_files_local_output):
+    bash = f'cd {bioautoml_app_path} && '
+    bash += 'conda activate bioautoml && '
+    bash += f'{bash_command} >> {process_files_local_output}/output.log'
+
+    return bash
+
+
+def _prepare(process):
     _prepare_files(process)
     bash_command = _generate_bash_command(process)
     logger.info(f'created bash_command={bash_command}')
+
+    return bash_command
 
 
 def _prepare_files(process):
