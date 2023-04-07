@@ -3,7 +3,7 @@ import json
 import traceback
 from types import SimpleNamespace
 from os import environ
-from subprocess import run
+from os import system
 
 from ..services.logger_service import get_logger
 from ..services.os_service import create_folder
@@ -33,15 +33,16 @@ def start(message):
 def _run(bash_command, process):
     process_files_local_output = _remove_double_bar(output_local_files + process.parametersEntity.output)
     all_bash_command = complement_bash_command(bash_command, process_files_local_output)
-    run(all_bash_command, shell=True)
+    system(all_bash_command)
 
 
 def complement_bash_command(bash_command, process_files_local_output):
     bash = f'cd {bioautoml_app_path} && '
-    bash += 'conda activate bioautoml && '
-    bash += f'{bash_command} >> {process_files_local_output}/output.log'
+    bash += f'conda run -n bioautoml python {bash_command} >> {process_files_local_output}/output.log'
 
-    return bash
+    logger.info(f'all bash command={_remove_double_bar(bash)}')
+
+    return _remove_double_bar(bash)
 
 
 def _prepare(process):
@@ -97,8 +98,7 @@ def _generate_afem_bash_command(process, process_reference):
     estimations = process.parametersEntity.estimations
     cpu_numbers = process.parametersEntity.cpuNumbers
 
-    bash_command = 'python '
-    bash_command += f'{bioautoml_app_path}'
+    bash_command = f'{bioautoml_app_path}'
     bash_command += f'{process_reference} '
     bash_command += f'-fasta_train {train_files}'
     bash_command += f'-fasta_label_train {label_train_files}'
@@ -106,7 +106,7 @@ def _generate_afem_bash_command(process, process_reference):
     bash_command += f'-fasta_label_test {label_test_files}'
     bash_command += f'-estimations {estimations} '
     bash_command += f'-n_cpu {cpu_numbers} '
-    bash_command += f'-output {output_path_files}'
+    bash_command += f'-output {output_path_files[:-1]}'
 
     return str(bash_command)
 
@@ -146,8 +146,7 @@ def _generate_metalearning_bash_command(process, process_reference):
     tuning = process.parametersEntity.tuning
     cpu_numbers = process.parametersEntity.cpuNumbers
 
-    bash_command = 'python '
-    bash_command += f'{bioautoml_app_path}'
+    bash_command = f'{bioautoml_app_path}'
     bash_command += f'{process_reference} '
     bash_command += f'-train {train_files}'
     bash_command += f'-train_label {label_train_files}'
@@ -159,7 +158,7 @@ def _generate_metalearning_bash_command(process, process_reference):
     bash_command += f'-n_cpu {cpu_numbers} '
     bash_command += f'-imbalance {imbalance} '
     bash_command += f'-tuning {tuning} '
-    bash_command += f'-output {output_path_files}'
+    bash_command += f'-output {output_path_files[:-1]}'
 
     return str(bash_command)
 
