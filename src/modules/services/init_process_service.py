@@ -106,9 +106,7 @@ def _generate_afem_bash_command(process, process_reference):
 
     if test_files != '':
         bash_command += f'-fasta_test {test_files}'
-
-        if labels_test != '':
-            bash_command += f'-fasta_label_test {labels_test}'
+        bash_command += f'-fasta_label_test {labels_test}'
 
     bash_command += f'-estimations {estimations} '
     bash_command += f'-n_cpu {cpu_numbers} '
@@ -141,14 +139,14 @@ def _generate_metalearning_bash_command(process, process_reference):
     train_files = _get_files_path(
         list(filter(lambda file: file.fileType == FileType.TRAIN.value, process.files))
     )
-    labels_train = _get_string_from_list(
-        list(filter(lambda label: label.labelType == LabelType.TRAIN.value, process.labels))
+    label_train_files = _get_files_path(
+        list(filter(lambda file: file.fileType == FileType.LABEL_TRAIN.value, process.files))
     )
     test_files = _get_files_path(
         list(filter(lambda file: file.fileType == FileType.TEST.value, process.files))
     )
-    labels_test = _get_string_from_list(
-        list(filter(lambda label: label.labelType == LabelType.TEST.value, process.labels))
+    label_test_files = _get_files_path(
+        list(filter(lambda file: file.fileType == FileType.LABEL_TEST.value, process.files))
     )
     sequence_files = _get_files_path(
         list(filter(lambda file: file.fileType == FileType.SEQUENCE.value, process.files))
@@ -163,13 +161,11 @@ def _generate_metalearning_bash_command(process, process_reference):
 
     bash_command = f'{process_reference} '
     bash_command += f'-train {train_files}'
-    bash_command += f'-train_label {labels_train}'
+    bash_command += f'-train_label {label_train_files}'
 
     if test_files != '':
         bash_command += f'-fasta_test {test_files}'
-
-        if labels_test != '':
-            bash_command += f'-fasta_label_test {labels_test}'
+        bash_command += f'-fasta_label_test {label_test_files}'
 
     bash_command += f'-test_nameseq {sequence_files}'
     bash_command += f'-classifier {classifier} '
