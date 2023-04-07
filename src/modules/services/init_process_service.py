@@ -99,8 +99,7 @@ def _generate_afem_bash_command(process, process_reference):
     estimations = process.parametersEntity.estimations
     cpu_numbers = process.parametersEntity.cpuNumbers
 
-    bash_command = f'{bioautoml_app_path}'
-    bash_command += f'{process_reference} '
+    bash_command = f'{process_reference} '
     bash_command += f'-fasta_train {train_files}'
     bash_command += f'-fasta_label_train {labels_train}'
 
@@ -117,11 +116,11 @@ def _generate_afem_bash_command(process, process_reference):
     return str(bash_command)
 
 
-def _get_string_from_list(strings):
+def _get_string_from_list(labels):
     text = ''
 
-    for string in strings:
-        text += f'{string} '
+    for label in labels:
+        text += f'{label.value} '
 
     return text
 
@@ -161,8 +160,7 @@ def _generate_metalearning_bash_command(process, process_reference):
     tuning = process.parametersEntity.tuning
     cpu_numbers = process.parametersEntity.cpuNumbers
 
-    bash_command = f'{bioautoml_app_path}'
-    bash_command += f'{process_reference} '
+    bash_command = f'{process_reference} '
     bash_command += f'-train {train_files}'
     bash_command += f'-train_label {labels_train}'
 
