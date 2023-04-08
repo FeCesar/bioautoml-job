@@ -164,8 +164,8 @@ def _generate_metalearning_bash_command(process, process_reference):
     bash_command += f'-train_label {label_train_files}'
 
     if test_files != '':
-        bash_command += f'-fasta_test {test_files}'
-        bash_command += f'-fasta_label_test {label_test_files}'
+        bash_command += f'-test {test_files}'
+        bash_command += f'-test_label {label_test_files}'
 
     bash_command += f'-test_nameseq {sequence_files}'
     bash_command += f'-classifier {classifier} '
