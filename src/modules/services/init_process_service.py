@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from os import environ
 from os import system
 
+from ..producers.error_producer import send_error
 from ..services.logger_service import get_logger
 from ..services.os_service import create_folder
 from ..classes.RcloneService import RcloneService
@@ -21,14 +22,16 @@ rclone = RcloneService()
 
 
 def start(message):
+    decoded_message = _decode(message)
+    process = json.loads(decoded_message, object_hook=lambda d: SimpleNamespace(**d))
+
     try:
-        decoded_message = _decode(message)
-        process = json.loads(decoded_message, object_hook=lambda d: SimpleNamespace(**d))
         bash_command = _prepare(process)
         _run(bash_command, process)
     except Exception as e:
         logger.error("Exception %s: %s" % (type(e), e))
         logger.debug(traceback.format_exc())
+        send_error(e, process.processModel.id)
 
 
 def _run(bash_command, process):
