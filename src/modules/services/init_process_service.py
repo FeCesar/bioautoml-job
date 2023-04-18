@@ -27,17 +27,18 @@ rclone = RcloneService()
 def start(message):
     decoded_message = __decode(message)
     process = json.loads(decoded_message, object_hook=lambda d: SimpleNamespace(**d))
-    update_status(ProcessStatus.PROCESSING, process.processModel.id)
+    update_status(ProcessStatus.PROCESSING.value, process.processModel.id)
 
     try:
         bash_command = __prepare(process)
         __run(bash_command, process)
         __observer_results(process)
+        update_status(ProcessStatus.FINISHED.value, process.processModel.id)
     except Exception as e:
         logger.error("Exception %s: %s" % (type(e), e))
         logger.debug(traceback.format_exc())
         send_error(e, process.processModel.id)
-        update_status(ProcessStatus.ERROR, process.processModel.id)
+        update_status(ProcessStatus.ERROR.value, process.processModel.id)
 
 
 def __observer_results(process):
