@@ -12,6 +12,7 @@ from ..classes.RcloneService import RcloneService
 from ..classes.ProcessType import ProcessTypes
 from ..classes.FileType import FileType
 from ..classes.LabelType import LabelType
+from ..classes.FileWatcher import FileWatcher
 
 logger = get_logger(__name__)
 
@@ -28,10 +29,17 @@ def start(message):
     try:
         bash_command = _prepare(process)
         _run(bash_command, process)
+        _observer_results(process)
     except Exception as e:
         logger.error("Exception %s: %s" % (type(e), e))
         logger.debug(traceback.format_exc())
         send_error(e, process.processModel.id)
+
+
+def _observer_results(process):
+    path = _remove_double_bar(output_local_files + process.parametersEntity.output)
+    watcher = FileWatcher(path, process.processModel.id)
+    watcher.watch()
 
 
 def _run(bash_command, process):
@@ -42,6 +50,7 @@ def _run(bash_command, process):
 
 def complement_bash_command(bash_command, process_files_local_output):
     bash = f'cd {bioautoml_app_path} && '
+    bash += 'git pull && '
     bash += 'git submodule init && git submodule update && '
     bash += f'conda run -n bioautoml python {bash_command} >> {process_files_local_output}/output.log'
 
