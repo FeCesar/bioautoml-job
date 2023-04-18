@@ -15,8 +15,6 @@ def send_error(ex: Exception, process_id):
         process_id
     )
 
-    logger.info(f'send error message={error_handler.__dict__}')
-
     message = error_handler.to_json()
     logger.info(f'error message={message}')
 

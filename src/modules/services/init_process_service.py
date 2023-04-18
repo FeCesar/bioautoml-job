@@ -6,9 +6,11 @@ from os import environ
 from os import system
 
 from ..producers.error_producer import send_error
+from ..producers.update_processes_producer import update_status
 from ..services.logger_service import get_logger
 from ..services.os_service import create_folder
 from ..classes.RcloneService import RcloneService
+from ..classes.ProcessStatus import ProcessStatus
 from ..classes.ProcessType import ProcessTypes
 from ..classes.FileType import FileType
 from ..classes.LabelType import LabelType
@@ -25,6 +27,7 @@ rclone = RcloneService()
 def start(message):
     decoded_message = __decode(message)
     process = json.loads(decoded_message, object_hook=lambda d: SimpleNamespace(**d))
+    update_status(ProcessStatus.PROCESSING, process.processModel.id)
 
     try:
         bash_command = __prepare(process)
@@ -34,6 +37,7 @@ def start(message):
         logger.error("Exception %s: %s" % (type(e), e))
         logger.debug(traceback.format_exc())
         send_error(e, process.processModel.id)
+        update_status(ProcessStatus.ERROR, process.processModel.id)
 
 
 def __observer_results(process):
