@@ -23,92 +23,92 @@ rclone = RcloneService()
 
 
 def start(message):
-    decoded_message = _decode(message)
+    decoded_message = __decode(message)
     process = json.loads(decoded_message, object_hook=lambda d: SimpleNamespace(**d))
 
     try:
-        bash_command = _prepare(process)
-        _run(bash_command, process)
-        _observer_results(process)
+        bash_command = __prepare(process)
+        __run(bash_command, process)
+        __observer_results(process)
     except Exception as e:
         logger.error("Exception %s: %s" % (type(e), e))
         logger.debug(traceback.format_exc())
         send_error(e, process.processModel.id)
 
 
-def _observer_results(process):
-    path = _remove_double_bar(output_local_files + process.parametersEntity.output)
+def __observer_results(process):
+    path = __remove_double_bar(output_local_files + process.parametersEntity.output)
     watcher = FileWatcher(path, process.processModel.id)
     watcher.watch()
 
 
-def _run(bash_command, process):
-    process_files_local_output = _remove_double_bar(output_local_files + process.parametersEntity.output)
-    all_bash_command = complement_bash_command(bash_command, process_files_local_output)
+def __run(bash_command, process):
+    process_files_local_output = __remove_double_bar(output_local_files + process.parametersEntity.output)
+    all_bash_command = __complement_bash_command(bash_command, process_files_local_output)
     system(all_bash_command)
 
 
-def complement_bash_command(bash_command, process_files_local_output):
+def __complement_bash_command(bash_command, process_files_local_output):
     bash = f'cd {bioautoml_app_path} && '
     bash += 'git pull && '
     bash += 'git submodule init && git submodule update && '
     bash += f'conda run -n bioautoml python {bash_command} >> {process_files_local_output}/output.log'
 
-    logger.info(f'all bash command={_remove_double_bar(bash)}')
+    logger.info(f'all bash command={__remove_double_bar(bash)}')
 
-    return _remove_double_bar(bash)
+    return __remove_double_bar(bash)
 
 
-def _prepare(process):
-    _prepare_files(process)
-    bash_command = _generate_bash_command(process)
+def __prepare(process):
+    __prepare_files(process)
+    bash_command = __generate_bash_command(process)
     logger.info(f'created bash_command={bash_command}')
 
     return bash_command
 
 
-def _prepare_files(process):
+def __prepare_files(process):
     process_id = process.processModel.id
     process_files_remote_path = rclone.bucket + '/' + process_id + '/'
-    process_files_local_path = _generate_files_path(process_id)
-    process_files_local_output = _remove_double_bar(output_local_files + process.parametersEntity.output)
+    process_files_local_path = __generate_files_path(process_id)
+    process_files_local_output = __remove_double_bar(output_local_files + process.parametersEntity.output)
 
     create_folder(process_files_local_path)
     create_folder(process_files_local_output)
     rclone.copy(process_files_remote_path, process_files_local_path)
 
 
-def _generate_files_path(process_id):
+def __generate_files_path(process_id):
     return str(rclone_extract_files_folder_path + process_id + '/')
 
 
-def _generate_bash_command(process):
+def __generate_bash_command(process):
     process_types = ProcessTypes[process.processModel.processType].value
     process_reference = process_types.get('reference')
     process_type = process_types.get('type')
 
     if process_type == 'AFEM_PARAMETERS':
-        return _generate_afem_bash_command(process, process_reference)
+        return __generate_afem_bash_command(process, process_reference)
 
     if process_type == 'METALEARNING_PARAMETERS':
-        return _generate_metalearning_bash_command(process, process_reference)
+        return __generate_metalearning_bash_command(process, process_reference)
 
 
-def _generate_afem_bash_command(process, process_reference):
-    train_files = _get_files_path(
+def __generate_afem_bash_command(process, process_reference):
+    train_files = __get_files_path(
         list(filter(lambda file: file.fileType == FileType.TRAIN.value, process.files))
     )
-    labels_train = _get_string_from_list(
+    labels_train = __get_string_from_list(
         list(filter(lambda label: label.labelType == LabelType.TRAIN.value, process.labels))
     )
-    test_files = _get_files_path(
+    test_files = __get_files_path(
         list(filter(lambda file: file.fileType == FileType.TEST.value, process.files))
     )
-    labels_test = _get_string_from_list(
+    labels_test = __get_string_from_list(
         list(filter(lambda label: label.labelType == LabelType.TEST.value, process.labels))
     )
 
-    output_path_files = _remove_double_bar(output_local_files + process.parametersEntity.output)
+    output_path_files = __remove_double_bar(output_local_files + process.parametersEntity.output)
     estimations = process.parametersEntity.estimations
     cpu_numbers = process.parametersEntity.cpuNumbers
 
@@ -127,7 +127,7 @@ def _generate_afem_bash_command(process, process_reference):
     return str(bash_command)
 
 
-def _get_string_from_list(labels):
+def __get_string_from_list(labels):
     text = ''
 
     for label in labels:
@@ -136,35 +136,35 @@ def _get_string_from_list(labels):
     return text
 
 
-def _get_files_path(files):
+def __get_files_path(files):
     file_paths = ''
 
     for file in files:
-        file_paths += _generate_files_path(file.processId)
+        file_paths += __generate_files_path(file.processId)
         file_paths += file.fileName
         file_paths += ' '
 
     return file_paths
 
 
-def _generate_metalearning_bash_command(process, process_reference):
-    train_files = _get_files_path(
+def __generate_metalearning_bash_command(process, process_reference):
+    train_files = __get_files_path(
         list(filter(lambda file: file.fileType == FileType.TRAIN.value, process.files))
     )
-    label_train_files = _get_files_path(
+    label_train_files = __get_files_path(
         list(filter(lambda file: file.fileType == FileType.LABEL_TRAIN.value, process.files))
     )
-    test_files = _get_files_path(
+    test_files = __get_files_path(
         list(filter(lambda file: file.fileType == FileType.TEST.value, process.files))
     )
-    label_test_files = _get_files_path(
+    label_test_files = __get_files_path(
         list(filter(lambda file: file.fileType == FileType.LABEL_TEST.value, process.files))
     )
-    sequence_files = _get_files_path(
+    sequence_files = __get_files_path(
         list(filter(lambda file: file.fileType == FileType.SEQUENCE.value, process.files))
     )
 
-    output_path_files = _remove_double_bar(output_local_files + process.parametersEntity.output)
+    output_path_files = __remove_double_bar(output_local_files + process.parametersEntity.output)
     classifier = process.parametersEntity.classifiers
     normalization = process.parametersEntity.normalization
     imbalance = process.parametersEntity.imbalance
@@ -190,9 +190,9 @@ def _generate_metalearning_bash_command(process, process_reference):
     return str(bash_command)
 
 
-def _remove_double_bar(string):
+def __remove_double_bar(string):
     return string.replace('//', '/')
 
 
-def _decode(process):
+def __decode(process):
     return base64.b64decode(process)
