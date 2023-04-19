@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 rclone_extract_files_folder_path = environ.get("APP_RCLONE_EXTRACT_FILES_FOLDER_PATH")
 bioautoml_app_path = environ.get("APP_BIOAUTOML_PATH")
 output_local_files = environ.get("APP_OUTPUT_FILES")
+miniconda_app_path = environ.get("APP_MINICONDA_PATH")
 rclone = RcloneService()
 
 
@@ -57,7 +58,7 @@ def __complement_bash_command(bash_command, process_files_local_output):
     bash = f'cd {bioautoml_app_path} && '
     bash += 'git pull && '
     bash += 'git submodule init && git submodule update && '
-    bash += f'~/miniconda3/bin/conda run -n bioautoml python {bash_command} >> {process_files_local_output}/output.log'
+    bash += f'{miniconda_app_path}conda run -n bioautoml python {bash_command} >> {process_files_local_output}/output.log'
 
     logger.info(f'all bash command={__remove_double_bar(bash)}')
 
