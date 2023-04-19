@@ -57,7 +57,7 @@ def __complement_bash_command(bash_command, process_files_local_output):
     bash = f'cd {bioautoml_app_path} && '
     bash += 'git pull && '
     bash += 'git submodule init && git submodule update && '
-    bash += f'conda run -n bioautoml python {bash_command} >> {process_files_local_output}/output.log'
+    bash += f'~/miniconda3/bin/conda run -n bioautoml python {bash_command} >> {process_files_local_output}/output.log'
 
     logger.info(f'all bash command={__remove_double_bar(bash)}')
 
