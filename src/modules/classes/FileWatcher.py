@@ -28,18 +28,33 @@ class FileWatcher(FileSystemEventHandler):
         self.__rclone.copy(event.src_path, self.__rclone.bucket + '/' + self.__process_id + '/results/')
 
     def watch(self):
-        file_size = os.path.getsize(self.__src_path + 'output.log')
-        self.__observer.schedule(self, path=self.__src_path, recursive=True)
-        self.__observer.start()
-        logger.info(f'monitoring start from path={self.__src_path}')
+        retries = 3
+        exception = None
+        file_size = 0
 
-        while file_size <= 1:
-            FileWatcher.__pause(60)
-            file_size = os.path.getsize(self.__src_path + 'output.log')
+        while retries > 0:
+            try:
+                file_size = os.path.getsize(self.__src_path + 'output.log')
+                retries = -1
+            except Exception as e:
+                FileWatcher.__pause(60)
+                exception = e
+                retries -= 1
 
-        self.__observer.stop()
-        self.__observer.join()
-        logger.info(f'monitoring finished from path={self.__src_path}')
+        if retries == -1:
+            self.__observer.schedule(self, path=self.__src_path, recursive=True)
+            self.__observer.start()
+            logger.info(f'monitoring start from path={self.__src_path}')
+
+            while file_size <= 1:
+                FileWatcher.__pause(60)
+                file_size = os.path.getsize(self.__src_path + 'output.log')
+
+            self.__observer.stop()
+            self.__observer.join()
+            logger.info(f'monitoring finished from path={self.__src_path}')
+        else:
+            raise exception
 
     @classmethod
     def __pause(cls, secs):
