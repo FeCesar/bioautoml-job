@@ -33,7 +33,10 @@ class RcloneService:
     def copy(self, source_from, source_to):
         logger.info(f'copy files from={source_from} to={source_to}')
 
-        volumes = [self.config_file, f'{source_to}:{source_to}']
+        if source_to.contains(self.bucket):
+            volumes = [self.config_file]
+        else:
+            volumes = [self.config_file, f'{source_to}:{source_to}']
 
         container = self.client.containers.run(image=self.image, detach=self.detach, volumes=volumes,
                                                command=['copy', source_from, source_to])

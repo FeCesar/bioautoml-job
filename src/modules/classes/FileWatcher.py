@@ -37,7 +37,7 @@ class FileWatcher(FileSystemEventHandler):
                 file_size = os.path.getsize(self.__src_path + 'output.log')
                 retries = -1
             except Exception as e:
-                FileWatcher.__pause(60)
+                FileWatcher.__pause(7)
                 exception = e
                 retries -= 1
 
