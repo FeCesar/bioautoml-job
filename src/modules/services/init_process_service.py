@@ -15,6 +15,7 @@ from ..classes.ProcessType import ProcessTypes
 from ..classes.FileType import FileType
 from ..classes.LabelType import LabelType
 from ..classes.FileWatcher import FileWatcher
+from ..classes.ThreadPoolService import ThreadPoolService
 
 logger = get_logger(__name__)
 
@@ -23,6 +24,8 @@ bioautoml_app_path = environ.get("APP_BIOAUTOML_PATH")
 output_local_files = environ.get("APP_OUTPUT_FILES")
 miniconda_app_path = environ.get("APP_MINICONDA_PATH")
 rclone = RcloneService()
+amount_workers = int(environ.get("APP_WORKERS"))
+thread_poll = ThreadPoolService(amount_workers)
 
 
 def start(message):
@@ -32,7 +35,10 @@ def start(message):
 
     try:
         bash_command = __prepare(process)
-        __run(bash_command, process)
+
+        thread = thread_poll.get_worker()
+        thread.submit(__run, bash_command, process)
+
         __observer_results(process)
         update_status(ProcessStatus.FINISHED.value, process.processModel.id)
     except Exception as e:
