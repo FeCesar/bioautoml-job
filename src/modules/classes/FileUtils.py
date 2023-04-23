@@ -12,12 +12,12 @@ class FileUtils:
     @classmethod
     def compress_folder(cls, folder_path):
         logger.info(f'start to compress={folder_path}')
+        zip_path_folder = folder_path + DEFAULT_ZIP_NAME
 
-        with zipfile.ZipFile(DEFAULT_ZIP_NAME, 'w') as f:
+        with zipfile.ZipFile(zip_path_folder, 'w') as f:
             for file in glob.glob(folder_path):
                 f.write(file)
 
-        zip_name = folder_path + DEFAULT_ZIP_NAME
-        logger.info(f'finish to compress={folder_path} - created={zip_name}')
+        logger.info(f'finish to compress={folder_path} - created={zip_path_folder}')
 
-        return zip_name
+        return zip_path_folder
