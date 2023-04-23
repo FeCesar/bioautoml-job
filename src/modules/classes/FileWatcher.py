@@ -6,6 +6,7 @@ from watchdog.events import FileSystemEventHandler
 
 from ..services.logger_service import get_logger
 from ..classes.RcloneService import RcloneService
+from ..classes.FileUtils import FileUtils
 
 
 logger = get_logger("FileWatcher")
@@ -21,11 +22,9 @@ class FileWatcher(FileSystemEventHandler):
 
     def on_created(self, event):
         logger.info(f'event-path={event.src_path} & event-type={event.event_type}')
-        self.__rclone.copy(event.src_path, self.__rclone.bucket + '/' + self.__process_id + '/results/')
 
     def on_modified(self, event):
         logger.info(f'event-path={event.src_path} & event-type={event.event_type}')
-        self.__rclone.copy(event.src_path, self.__rclone.bucket + '/' + self.__process_id + '/results/')
 
     def watch(self):
         retries = 3
@@ -53,6 +52,10 @@ class FileWatcher(FileSystemEventHandler):
             self.__observer.stop()
             self.__observer.join()
             logger.info(f'monitoring finished from path={self.__src_path}')
+
+            zip_name = FileUtils.compress_folder(self.__src_path)
+            self.__rclone.copy(zip_name, self.__rclone.bucket + '/' + self.__process_id)
+
         else:
             raise exception
 
