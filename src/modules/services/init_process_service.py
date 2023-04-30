@@ -6,6 +6,7 @@ from os import environ
 from os import system
 
 from ..producers.error_producer import send_error
+from ..producers.generate_result_producer import send_result
 from ..producers.update_processes_producer import update_status
 from ..services.logger_service import get_logger
 from ..services.os_service import create_folder
@@ -40,7 +41,9 @@ def start(message):
         thread.submit(__run, bash_command, process)
 
         __observer_results(process)
+
         update_status(ProcessStatus.FINISHED.value, process.processModel.id)
+        send_result(process.processModel.id)
     except Exception as e:
         logger.error("Exception %s: %s" % (type(e), e))
         logger.debug(traceback.format_exc())
