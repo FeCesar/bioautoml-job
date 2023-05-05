@@ -1,10 +1,12 @@
 import zipfile
-import glob
+import os
+import pathlib
 
 from ..services.logger_service import get_logger
 
 logger = get_logger('FileUtils')
 DEFAULT_ZIP_NAME = 'results.zip'
+IGNORED_FILES = ['results.zip', 'output.log']
 
 
 class FileUtils:
@@ -12,12 +14,18 @@ class FileUtils:
     @classmethod
     def compress_folder(cls, folder_path):
         logger.info(f'start to compress={folder_path}')
-        zip_path_folder = folder_path + DEFAULT_ZIP_NAME
+        folder = pathlib.Path(folder_path)
+        owd = os.getcwd()
+        os.chdir(folder)
 
-        with zipfile.ZipFile(zip_path_folder, 'w') as f:
-            for file in glob.glob(folder_path):
-                f.write(file)
+        with zipfile.ZipFile(DEFAULT_ZIP_NAME, 'w',  zipfile.ZIP_DEFLATED) as zip:
+            for file in folder.iterdir():
+                if file.name not in IGNORED_FILES:
+                    zip.write(file)
 
-        logger.info(f'finish to compress={folder_path} - created={zip_path_folder}')
+        os.chdir(owd)
 
-        return zip_path_folder
+        zip_name = folder_path + DEFAULT_ZIP_NAME
+        logger.info(f'finish to compress={folder_path} - created={zip_name}')
+
+        return zip_name
