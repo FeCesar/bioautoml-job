@@ -54,7 +54,7 @@ class FileWatcher(FileSystemEventHandler):
             logger.info(f'monitoring finished from path={self.__src_path}')
 
             zip_name = FileUtils.compress_folder(self.__src_path)
-            self.__rclone.copy(zip_name, self.__rclone.bucket + '/' + self.__process_id + '/results.zip')
+            self.__rclone.copy(zip_name, self.__rclone.bucket + '/' + self.__process_id + '/')
 
         else:
             raise exception
