@@ -1,0 +1,27 @@
+#! /bin/bash
+
+# Get the bioautoml and install dependecy modules
+cd ~
+
+git clone https://github.com/Bonidia/BioAutoML.git BioAutoML
+
+cd BioAutoML
+
+git submodule init
+git submodule update
+
+
+# Install miniconda
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+chmod +x Miniconda3-latest-Linux-x86_64.sh
+
+./Miniconda3-latest-Linux-x86_64.sh
+
+export PATH=~/miniconda3/bin:$PATH
+
+# Create environment
+conda env create -f BioAutoML-env.yml -n bioautoml
+
+# Run the job
+python ~/bioautoml-job/src/main.py
