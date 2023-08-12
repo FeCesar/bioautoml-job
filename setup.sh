@@ -26,6 +26,8 @@ export PATH=~/miniconda3/bin:$PATH
 conda env create -f BioAutoML-env.yml -n bioautoml
 
 # Run the job
-apt install python3-pip
+apt-get update -y
+apt-get update -y
+apt-get install -y python3-pip
 pip install -r ~/bioautoml-job/requirements.txt
 python3 ~/bioautoml-job/src/main.py
