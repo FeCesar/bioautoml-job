@@ -28,4 +28,5 @@ export PATH=~/miniconda3/bin:$PATH
 conda env create -f BioAutoML-env.yml -n bioautoml
 
 # Run the job
+pip install -r ~/bioautoml-job/requirements.txt
 python ~/bioautoml-job/src/main.py
