@@ -25,5 +25,9 @@ jobs:
               cd ~
               export APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}
               export APP_WORKERS=${{ secrets.APP_WORKERS }}
+              export APP_RCLONE_EXTRACT_FILES_FOLDER_PATH=${{ secrets.APP_RCLONE_EXTRACT_FILES_FOLDER_PATH }}
+              export APP_BIOAUTOML_PATH=${{ secrets.APP_BIOAUTOML_PATH }}
+              export APP_OUTPUT_FILES=${{ secrets.APP_OUTPUT_FILES }}
+              export APP_MINICONDA_PATH=${{ secrets.APP_MINICONDA_PATH }}
               export APP_LOGGER_LEVEL=INFO
               bash ~/bioautoml-job/setup.sh
