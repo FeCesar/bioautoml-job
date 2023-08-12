@@ -16,8 +16,6 @@ cd ~
 
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 
-cd ~/miniconda
-
 chmod +x Miniconda3-latest-Linux-x86_64.sh
 
 ./Miniconda3-latest-Linux-x86_64.sh
@@ -28,5 +26,6 @@ export PATH=~/miniconda3/bin:$PATH
 conda env create -f BioAutoML-env.yml -n bioautoml
 
 # Run the job
+apt install python3-pip
 pip install -r ~/bioautoml-job/requirements.txt
 python3 ~/bioautoml-job/src/main.py
