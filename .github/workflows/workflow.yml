@@ -5,27 +5,26 @@ on:
     branches: [ "main" ]
 
 jobs:
+  deploy:
+      name: Deploy Onpremise
+      runs-on: ubuntu-latest
 
-deploy:
-    name: Deploy Onpremise
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Connect Onpremise and Run Commands
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          port: ${{ secrets.VPS_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd ~
-            git clone https://github.com/FeCesar/bioautoml-job.git
-            cd bioautoml-job
-            git pull
-            cd ~
-            export APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}
-            export APP_WORKERS=${{ secrets.APP_WORKERS }}
-            export APP_LOGGER_LEVEL=INFO
-            bash ~/bioautoml-job/setup.sh
+      steps:
+        - name: Connect Onpremise and Run Commands
+          uses: appleboy/ssh-action@v1.0.0
+          with:
+            host: ${{ secrets.VPS_HOST }}
+            username: ${{ secrets.VPS_USER }}
+            port: ${{ secrets.VPS_PORT }}
+            key: ${{ secrets.SSH_KEY }}
+            script: |
+              cd ~
+              git clone https://github.com/FeCesar/bioautoml-job.git
+              cd bioautoml-job
+              git pull
+              cd ~
+              export APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}
+              export APP_WORKERS=${{ secrets.APP_WORKERS }}
+              export APP_LOGGER_LEVEL=INFO
+              bash ~/bioautoml-job/setup.sh
             
