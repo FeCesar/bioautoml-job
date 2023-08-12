@@ -26,5 +26,5 @@ jobs:
               export APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}
               export APP_WORKERS=${{ secrets.APP_WORKERS }}
               export APP_LOGGER_LEVEL=INFO
-              bash ~/bioautoml-job/setup.sh
+              echo "123"
             
