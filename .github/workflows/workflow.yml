@@ -24,6 +24,7 @@ jobs:
               git pull
               cd ~
               rm -rf /etc/environment
+              touch /etc/environment
               LC_ALL=en_US.UTF-8 >> /etc/environment
               APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }} >> /etc/environment
               APP_WORKERS=${{ secrets.APP_WORKERS }} >> /etc/environment
