@@ -23,11 +23,13 @@ jobs:
               cd bioautoml-job
               git pull
               cd ~
-              export APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}
-              export APP_WORKERS=${{ secrets.APP_WORKERS }}
-              export APP_RCLONE_EXTRACT_FILES_FOLDER_PATH=${{ secrets.APP_RCLONE_EXTRACT_FILES_FOLDER_PATH }}
-              export APP_BIOAUTOML_PATH=${{ secrets.APP_BIOAUTOML_PATH }}
-              export APP_OUTPUT_FILES=${{ secrets.APP_OUTPUT_FILES }}
-              export APP_MINICONDA_PATH=${{ secrets.APP_MINICONDA_PATH }}
-              export APP_LOGGER_LEVEL=INFO
+              rm -rf /etc/environment
+              LC_ALL=en_US.UTF-8 >> /etc/environment
+              APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }} >> /etc/environment
+              APP_WORKERS=${{ secrets.APP_WORKERS }} >> /etc/environment
+              APP_RCLONE_EXTRACT_FILES_FOLDER_PATH=${{ secrets.APP_RCLONE_EXTRACT_FILES_FOLDER_PATH }} >> /etc/environment
+              APP_BIOAUTOML_PATH=${{ secrets.APP_BIOAUTOML_PATH }} >> /etc/environment
+              APP_OUTPUT_FILES=${{ secrets.APP_OUTPUT_FILES }} >> /etc/environment
+              APP_MINICONDA_PATH=${{ secrets.APP_MINICONDA_PATH }} >> /etc/environment
+              APP_LOGGER_LEVEL=INFO >> /etc/environment
               bash ~/bioautoml-job/setup.sh
