@@ -23,13 +23,12 @@ jobs:
               cd bioautoml-job
               git pull
               cd ~
-              rm -rf /etc/environment
-              echo "LC_ALL=en_US.UTF-8" >> /etc/environment
-              echo "APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}" >> /etc/environment
-              echo "APP_WORKERS=${{ secrets.APP_WORKERS }}" >> /etc/environment
-              echo "APP_RCLONE_EXTRACT_FILES_FOLDER_PATH=${{ secrets.APP_RCLONE_EXTRACT_FILES_FOLDER_PATH }}" >> /etc/environment
-              echo "APP_BIOAUTOML_PATH=${{ secrets.APP_BIOAUTOML_PATH }}" >> /etc/environment
-              echo "APP_OUTPUT_FILES=${{ secrets.APP_OUTPUT_FILES }}" >> /etc/environment
-              echo "APP_MINICONDA_PATH=${{ secrets.APP_MINICONDA_PATH }}" >> /etc/environment
-              echo "APP_LOGGER_LEVEL=INFO" >> /etc/environment
+              rm -rf ~/bioautoml-job/.env
+              echo "APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}" >> ~/bioautoml-job/.env
+              echo "APP_WORKERS=${{ secrets.APP_WORKERS }}" >> ~/bioautoml-job/.env
+              echo "APP_RCLONE_EXTRACT_FILES_FOLDER_PATH=${{ secrets.APP_RCLONE_EXTRACT_FILES_FOLDER_PATH }}" >> ~/bioautoml-job/.env
+              echo "APP_BIOAUTOML_PATH=${{ secrets.APP_BIOAUTOML_PATH }}" >> ~/bioautoml-job/.env
+              echo "APP_OUTPUT_FILES=${{ secrets.APP_OUTPUT_FILES }}" >> ~/bioautoml-job/.env
+              echo "APP_MINICONDA_PATH=${{ secrets.APP_MINICONDA_PATH }}" >> ~/bioautoml-job/.env
+              echo "APP_LOGGER_LEVEL=INFO" >> ~/bioautoml-job/.env
               bash ~/bioautoml-job/setup.sh
