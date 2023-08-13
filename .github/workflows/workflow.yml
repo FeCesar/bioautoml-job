@@ -32,5 +32,4 @@ jobs:
               echo "APP_OUTPUT_FILES=${{ secrets.APP_OUTPUT_FILES }}" >> /etc/environment
               echo "APP_MINICONDA_PATH=${{ secrets.APP_MINICONDA_PATH }}" >> /etc/environment
               echo "APP_LOGGER_LEVEL=INFO" >> /etc/environment
-              set -a; source /etc/environment; set +a;
               bash ~/bioautoml-job/setup.sh
