@@ -16,9 +16,6 @@ apt-get update -y
 apt-get upgrade -y
 apt-get install -y python3-pip
 pip install -r ~/bioautoml-job/requirements.txt
-
-echo "Kill actual app process"
-pkill -9 -f /root/bioautoml-job/src/main.py
 echo "Run App"
 nohup python3 ~/bioautoml-job/src/main.py &
 disown
