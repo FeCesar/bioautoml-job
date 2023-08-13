@@ -16,4 +16,4 @@ apt-get update -y
 apt-get upgrade -y
 apt-get install -y python3-pip
 pip install -r ~/bioautoml-job/requirements.txt
-source /env/environment && python3 ~/bioautoml-job/src/main.py
+source /etc/environment && python3 ~/bioautoml-job/src/main.py
