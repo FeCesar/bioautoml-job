@@ -30,5 +30,19 @@ jobs:
               echo "APP_BIOAUTOML_PATH=${{ secrets.APP_BIOAUTOML_PATH }}" >> ~/bioautoml-job/.env
               echo "APP_OUTPUT_FILES=${{ secrets.APP_OUTPUT_FILES }}" >> ~/bioautoml-job/.env
               echo "APP_MINICONDA_PATH=${{ secrets.APP_MINICONDA_PATH }}" >> ~/bioautoml-job/.env
+              echo "APP_RCLONE_CONFIG_PATH=${{ secrets.APP_RCLONE_CONFIG_PATH }}" >> >> ~/bioautoml-job/.env
               echo "APP_LOGGER_LEVEL=INFO" >> ~/bioautoml-job/.env
+              rm -rf ~/.config/rclone/rclone.conf
+              echo "[s3]" >> ~/.config/rclone/rclone.conf
+              echo "type = s3" >> ~/.config/rclone/rclone.conf
+              echo "provider = AWS" >> ~/.config/rclone/rclone.conf
+              echo "env_auth = false" >> ~/.config/rclone/rclone.conf
+              echo "access_key_id = ${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.config/rclone/rclone.conf
+              echo "secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.config/rclone/rclone.conf
+              echo "region = us-east-1" >> ~/.config/rclone/rclone.conf
+              echo "endpoint =" >> ~/.config/rclone/rclone.conf
+              echo "location_constraint =" >> ~/.config/rclone/rclone.conf
+              echo "acl = private" >> ~/.config/rclone/rclone.conf
+              echo "server_side_encryption =" >> ~/.config/rclone/rclone.conf
+              echo "storage_class =" >> ~/.config/rclone/rclone.conf
               bash ~/bioautoml-job/setup.sh
