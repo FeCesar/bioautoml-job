@@ -19,6 +19,9 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             script: |
               cd ~
+              echo "Kill actual app process"
+              pkill -9 -f /root/bioautoml-job/src/main.py
+              rm -rf ~/bioautoml-job/
               git clone https://github.com/FeCesar/bioautoml-job.git
               cd bioautoml-job
               git pull
