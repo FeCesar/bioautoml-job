@@ -18,6 +18,7 @@ apt-get install -y python3-pip
 pip install -r ~/bioautoml-job/requirements.txt
 
 echo "Run App"
-nohup python3 ~/bioautoml-job/src/main.py &
+nohup python3 ~/bioautoml-job/src/main.py > ~/cd-outputs/output.log 2>&1 &
 
+disown
 exit
