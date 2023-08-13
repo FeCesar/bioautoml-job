@@ -17,8 +17,7 @@ apt-get upgrade -y
 apt-get install -y python3-pip
 pip install -r ~/bioautoml-job/requirements.txt
 
-now=$(date +"%Y-%m-%d %H:%M:%S")
-nohup python3 ~/bioautoml-job/src/main.py > ~/cd-outputs/output-$now.log 2>&1 &
-
+pkill -9 -f /root/bioautoml-job/src/main.py
+nohup python3 ~/bioautoml-job/src/main.py &
 disown
 exit
