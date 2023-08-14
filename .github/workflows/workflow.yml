@@ -23,6 +23,7 @@ jobs:
               cd bioautoml-job
               git pull
               cd ~
+              rm -rf ~/bioautoml-job/app.log
               rm -rf ~/bioautoml-job/.env
               echo "APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}" >> ~/bioautoml-job/.env
               echo "APP_WORKERS=${{ secrets.APP_WORKERS }}" >> ~/bioautoml-job/.env
