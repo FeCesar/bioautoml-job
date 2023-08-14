@@ -7,7 +7,7 @@ def get_logger(name):
     log_formatter = "[%(asctime)s] [%(module)s.%(funcName)s:%(lineno)d] [thread=%(thread)d] " \
                     "[%(levelname)s] [%(message)s]"
 
-    log_filename = "~/bioautoml-job/app.log"
+    log_filename = "app.log"
 
     logging.basicConfig(filename=log_filename, filemode='w', format=log_formatter, level=log_level)
 
