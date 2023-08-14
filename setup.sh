@@ -21,7 +21,7 @@ echo "Kill actual app process"
 pkill -9 -f /root/bioautoml-job/src/main.py
 
 echo "Run App"
-nohup python3 ~/bioautoml-job/src/main.py > ~/cd-outputs/output.log 2>&1 &
+nohup python3 ~/bioautoml-job/src/main.py > ~/cd-outputs/setup.log 2>&1 &
 
 disown
 exit

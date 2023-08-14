@@ -46,4 +46,6 @@ jobs:
               echo "acl = private" >> ~/.config/rclone/rclone.conf
               echo "server_side_encryption =" >> ~/.config/rclone/rclone.conf
               echo "storage_class =" >> ~/.config/rclone/rclone.conf
-              nohup bash ~/bioautoml-job/setup.sh &
+              rm -rf ~/cd-outputs/
+              mkdir ~/cd-outputs/
+              nohup bash ~/bioautoml-job/setup.sh > ~/cd-outputs/workflow-output.log 2>&1 &
