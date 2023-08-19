@@ -52,7 +52,7 @@ jobs:
               echo "Description=bioautoml-job" >> /etc/systemd/system/bioautomljob.service
               echo "[Service]" >> /etc/systemd/system/bioautomljob.service
               echo "Type=simple" >> /etc/systemd/system/bioautomljob.service
-              echo "ExecStart=~/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
+              echo "ExecStart=/bin/bash ~/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
               echo "[Install]" >> /etc/systemd/system/bioautomljob.service
               echo "WantedBy=default.target" >> /etc/systemd/system/bioautomljob.service
               systemctl enable bioautomljob.service
