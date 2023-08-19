@@ -35,6 +35,7 @@ jobs:
               echo "APP_RCLONE_CONFIG_PATH=${{ secrets.APP_RCLONE_CONFIG_PATH }}" >> ~/bioautoml-job/.env
               echo "APP_LOGGER_LEVEL=INFO" >> ~/bioautoml-job/.env
               rm -rf ~/.config/rclone/rclone.conf
+              mkdir ~/.config/rclone/
               touch ~/.config/rclone/rclone.conf
               echo "[s3]" >> ~/.config/rclone/rclone.conf
               echo "type = s3" >> ~/.config/rclone/rclone.conf
