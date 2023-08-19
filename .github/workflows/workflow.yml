@@ -34,7 +34,7 @@ jobs:
               echo "APP_MINICONDA_PATH=${{ secrets.APP_MINICONDA_PATH }}" >> ~/bioautoml-job/.env
               echo "APP_RCLONE_CONFIG_PATH=${{ secrets.APP_RCLONE_CONFIG_PATH }}" >> ~/bioautoml-job/.env
               echo "APP_LOGGER_LEVEL=INFO" >> ~/bioautoml-job/.env
-              rm -rf ~/.config/rclone/rclone.conf
+              rm -rf ~/.config/rclone/
               mkdir ~/.config/rclone/
               touch ~/.config/rclone/rclone.conf
               echo "[s3]" >> ~/.config/rclone/rclone.conf
