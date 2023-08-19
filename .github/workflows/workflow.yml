@@ -46,6 +46,14 @@ jobs:
               echo "acl = private" >> ~/.config/rclone/rclone.conf
               echo "server_side_encryption =" >> ~/.config/rclone/rclone.conf
               echo "storage_class =" >> ~/.config/rclone/rclone.conf
-              rm -rf ~/cd-outputs/
-              mkdir ~/cd-outputs/
-              nohup bash ~/bioautoml-job/setup.sh > ~/cd-outputs/workflow-output.log 2>&1 &
+              systemctl stop bioautomljob.service
+              rm -rf /etc/systemd/system/bioautomljob.service
+              echo "[Unit]" >> /etc/systemd/system/bioautomljob.service
+              echo "Description=bioautoml-job" >> /etc/systemd/system/bioautomljob.service
+              echo "[Service]" >> /etc/systemd/system/bioautomljob.service
+              echo "Type=simple" >> /etc/systemd/system/bioautomljob.service
+              echo "ExecStart=~/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
+              echo "[Install]" >> /etc/systemd/system/bioautomljob.service
+              echo "WantedBy=default.target" >> /etc/systemd/system/bioautomljob.service
+              systemctl enable bioautomljob.service
+              systemctl start bioautomljob.service
