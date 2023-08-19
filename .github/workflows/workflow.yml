@@ -19,12 +19,12 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             script: |
               systemctl stop bioautomljob.service
+              rm -rf /etc/systemd/system/bioautomljob.service
               cd ~
               git clone https://github.com/FeCesar/bioautoml-job.git
               cd bioautoml-job
               git pull
               cd ~
-              rm -rf ~/bioautoml-job/app.log
               rm -rf ~/bioautoml-job/.env
               echo "APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}" >> ~/bioautoml-job/.env
               echo "APP_WORKERS=${{ secrets.APP_WORKERS }}" >> ~/bioautoml-job/.env
@@ -49,7 +49,6 @@ jobs:
               echo "acl = private" >> ~/.config/rclone/rclone.conf
               echo "server_side_encryption =" >> ~/.config/rclone/rclone.conf
               echo "storage_class =" >> ~/.config/rclone/rclone.conf
-              rm -rf /etc/systemd/system/bioautomljob.service
               echo "[Unit]" >> /etc/systemd/system/bioautomljob.service
               echo "Description=bioautoml-job" >> /etc/systemd/system/bioautomljob.service
               echo "[Service]" >> /etc/systemd/system/bioautomljob.service
