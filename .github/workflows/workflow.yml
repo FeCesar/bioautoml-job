@@ -23,6 +23,7 @@ jobs:
               cd bioautoml-job
               git pull
               cd ~
+              chmod +x ~/bioautoml-job/setup.sh
               rm -rf ~/bioautoml-job/app.log
               rm -rf ~/bioautoml-job/.env
               echo "APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}" >> ~/bioautoml-job/.env
@@ -52,7 +53,7 @@ jobs:
               echo "Description=bioautoml-job" >> /etc/systemd/system/bioautomljob.service
               echo "[Service]" >> /etc/systemd/system/bioautomljob.service
               echo "Type=simple" >> /etc/systemd/system/bioautomljob.service
-              echo "ExecStart=/bin/bash ~/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
+              echo "ExecStart=~/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
               echo "[Install]" >> /etc/systemd/system/bioautomljob.service
               echo "WantedBy=default.target" >> /etc/systemd/system/bioautomljob.service
               systemctl enable bioautomljob.service
