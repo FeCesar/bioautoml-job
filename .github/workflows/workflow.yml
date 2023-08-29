@@ -51,11 +51,13 @@ jobs:
               echo "storage_class =" >> ~/.config/rclone/rclone.conf
               echo "[Unit]" >> /etc/systemd/system/bioautomljob.service
               echo "Description=bioautoml-job" >> /etc/systemd/system/bioautomljob.service
+              echo "After=multi-user.target" >> /etc/systemd/system/bioautomljob.service
               echo "[Service]" >> /etc/systemd/system/bioautomljob.service
               echo "Type=simple" >> /etc/systemd/system/bioautomljob.service
-              echo "ExecStart=~/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
+              echo "ExecStart=/bin/bash ~/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
               echo "[Install]" >> /etc/systemd/system/bioautomljob.service
-              echo "WantedBy=default.target" >> /etc/systemd/system/bioautomljob.service
+              echo "WantedBy=multi-user.target" >> /etc/systemd/system/bioautomljob.service
               chmod +x ~/bioautoml-job/setup.sh
+              systemctl daemon-reload
               systemctl enable bioautomljob.service
               systemctl start bioautomljob.service
