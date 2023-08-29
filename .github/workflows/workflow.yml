@@ -54,7 +54,7 @@ jobs:
               echo "After=multi-user.target" >> /etc/systemd/system/bioautomljob.service
               echo "[Service]" >> /etc/systemd/system/bioautomljob.service
               echo "Type=simple" >> /etc/systemd/system/bioautomljob.service
-              echo "ExecStart=/bin/bash ~/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
+              echo "ExecStart=/bin/bash /root/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
               echo "[Install]" >> /etc/systemd/system/bioautomljob.service
               echo "WantedBy=multi-user.target" >> /etc/systemd/system/bioautomljob.service
               chmod +x ~/bioautoml-job/setup.sh
