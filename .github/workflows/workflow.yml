@@ -26,6 +26,15 @@ jobs:
               git pull
               cd ~
               rm -rf ~/bioautoml-job/.env
+              git clone https://github.com/Bonidia/BioAutoML.git BioAutoML
+              cd ~/BioAutoML
+              git pull
+              git submodule init
+              git submodule update
+              apt-get update -y
+              apt-get upgrade -y
+              apt-get install -y python3-pip
+              pip install -r ~/bioautoml-job/requirements.txt
               echo "APP_AMQP_ADDRESS=${{ secrets.AMQP_ADDRESS }}" >> ~/bioautoml-job/.env
               echo "APP_WORKERS=${{ secrets.APP_WORKERS }}" >> ~/bioautoml-job/.env
               echo "APP_RCLONE_EXTRACT_FILES_FOLDER_PATH=${{ secrets.APP_RCLONE_EXTRACT_FILES_FOLDER_PATH }}" >> ~/bioautoml-job/.env
@@ -54,10 +63,9 @@ jobs:
               echo "After=multi-user.target" >> /etc/systemd/system/bioautomljob.service
               echo "[Service]" >> /etc/systemd/system/bioautomljob.service
               echo "Type=simple" >> /etc/systemd/system/bioautomljob.service
-              echo "ExecStart=/bin/bash /root/bioautoml-job/setup.sh" >> /etc/systemd/system/bioautomljob.service
+              echo "ExecStart=/usr/bin/python3 /root/bioautoml-job/src/main.py" >> /etc/systemd/system/bioautomljob.service
               echo "[Install]" >> /etc/systemd/system/bioautomljob.service
               echo "WantedBy=multi-user.target" >> /etc/systemd/system/bioautomljob.service
-              chmod +x ~/bioautoml-job/setup.sh
               systemctl daemon-reload
               systemctl enable bioautomljob.service
               systemctl start bioautomljob.service
