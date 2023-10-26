@@ -84,7 +84,7 @@ def __prepare(process):
 
 def __prepare_files(process):
     process_id = process.processModel.id
-    process_files_remote_path = rclone.bucket + '/' + process_id + '/'
+    process_files_remote_path = rclone.bucket + '/' + f'{process_id}' + '/'
     process_files_local_path = __generate_files_path(process_id)
     process_files_local_output = __remove_double_bar(output_local_files + process.parametersEntity.output)
 
@@ -94,7 +94,7 @@ def __prepare_files(process):
 
 
 def __generate_files_path(process_id):
-    return str(rclone_extract_files_folder_path + process_id + '/')
+    return str(rclone_extract_files_folder_path + f'{process_id}' + '/')
 
 
 def __generate_bash_command(process):
