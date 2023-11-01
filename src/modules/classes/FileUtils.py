@@ -21,10 +21,10 @@ class FileUtils:
         with zipfile.ZipFile(DEFAULT_ZIP_NAME, 'w') as z:
             for root, dirs, files in os.walk(folder):
                 for file in files:
-                    if file.name not in IGNORED_FILES:
+                    if file not in IGNORED_FILES:
                         z.write(os.path.join(root, file))
                 for directory in dirs:
-                    if file.name not in IGNORED_FILES:
+                    if file not in IGNORED_FILES:
                         z.write(os.path.join(root, directory))
 
         os.chdir(owd)
