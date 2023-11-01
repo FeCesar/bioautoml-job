@@ -49,6 +49,7 @@ class FileWatcher(FileSystemEventHandler):
                 FileWatcher.__pause(60)
                 file_size = os.path.getsize(self.__src_path + 'output.log')
 
+            FileWatcher.__pause(180)
             self.__observer.stop()
             self.__observer.join()
             logger.info(f'monitoring finished from path={self.__src_path}')
