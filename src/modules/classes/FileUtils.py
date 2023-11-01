@@ -18,10 +18,12 @@ class FileUtils:
         owd = os.getcwd()
         os.chdir(folder)
 
-        with zipfile.ZipFile(DEFAULT_ZIP_NAME, 'w',  zipfile.ZIP_DEFLATED) as zip:
-            for file in folder.iterdir():
-                if file.name not in IGNORED_FILES:
-                    zip.write(file)
+        with zipfile.ZipFile(DEFAULT_ZIP_NAME, 'w') as z:
+            for root, dirs, files in os.walk(folder):
+                for file in files:
+                    z.write(os.path.join(root, file))
+                for directory in dirs:
+                    z.write(os.path.join(root, directory))
 
         os.chdir(owd)
 
