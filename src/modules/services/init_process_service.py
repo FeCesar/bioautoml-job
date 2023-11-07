@@ -139,6 +139,8 @@ def __generate_afem_bash_command(process, process_reference):
     bash_command += f'-n_cpu {cpu_numbers} '
     bash_command += f'-output {output_path_files[:-1]}'
 
+    logger.info(f'generated bash command for process={process.processModel.id} bashCommand={str(bash_command)}')
+
     return str(bash_command)
 
 
